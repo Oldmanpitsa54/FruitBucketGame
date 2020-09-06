@@ -31,7 +31,7 @@ namespace Main
 
                         input = Console.ReadLine();
                         Borders(2, 8, input, out size);
-                        object[] playersList = new object[size];
+                        Player[] playersList = new Player[size];
 
                         for (int i = 0; i < size; i++)
                         {
@@ -69,8 +69,31 @@ namespace Main
                                     break;
                             }
                         }
+                        for(int i = 0; i < 100; i++)
+                        {
+                            foreach( Player s in playersList)
+                            {
+                                s.Guess(bucketWeight);
+                            }
+                        }
+                        int nearestValue = playersList[size - 1].niceTry;
 
-                        
+                        foreach (Player s in playersList)
+                        {
+                            if(Math.Abs(nearestValue - bucketWeight) > Math.Abs(s.niceTry - bucketWeight))
+                            {
+                                nearestValue =  s.niceTry;
+                            }
+                        }
+                        for(int i = 0; i < size; i++)
+                        {
+                            if (playersList[i].niceTry == nearestValue)
+                            {
+                                Console.WriteLine($"{playersList[i].Name} has won the game!");
+                            }
+                        }
+
+
                         break;
                    
                     case 2:

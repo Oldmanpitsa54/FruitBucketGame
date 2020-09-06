@@ -40,7 +40,7 @@ namespace DL
                         input = Console.ReadLine();
                         if (double.TryParse(input, out output))
                         {
-                            output = double.Parse(input); //
+                            output = double.Parse(input); 
                             break;
                         }
                     }
@@ -135,22 +135,22 @@ namespace DL
                 }
             }
 
-            public static void Top_check(string input, int bot_line, out int top_line)
-            {
-                while (true)
-                {
-                    Borders(input, out top_line);
-                    if (bot_line < top_line)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid value (less than bottom line). Try again.");
-                        input = Console.ReadLine();
-                    }
-                }
-            }
+            //public static void Top_check(string input, int bot_line, out int top_line)
+            //{
+            //    while (true)
+            //    {
+            //        Borders(input, out top_line);
+            //        if (bot_line < top_line)
+            //        {
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Invalid value (less than bottom line). Try again.");
+            //            input = Console.ReadLine();
+            //        }
+            //    }
+            //}
 
             public static void LaptopCountCheck(string input, out int output, int counter)
             {
