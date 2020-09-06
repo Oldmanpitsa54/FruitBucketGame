@@ -6,73 +6,187 @@ using System.Threading.Tasks;
 
 namespace Players
 {
-    abstract class Player
+    public abstract class Player
     {
 
         public string Name { get; set; }
 
         public int niceTry;
 
-        public abstract int Guess();
-          
+        public Player(string name)
+        {
+            Name = name;
+        }
+
+        public List<int> bossShot = new List<int>();
+
+        public abstract void Guess(int rightAnswer);
+
+
+
+        public virtual void GuessResult(int niceTry, int rightAnswer)
+        {
+            if (niceTry == rightAnswer)
+            {
+                Console.WriteLine($"Congratulations to {Name}! He has made the right answer. ");
+                return;
+            }
+            else
+            {
+                bossShot.Add(niceTry);
+            }
+        }
     }
 
-    class UberPlayer : Player
+    public class UberPlayer : Player
     {
-       
-
         public int counter = 40;
-        
-            public override int Guess()
+
+        public UberPlayer(string name)
+           : base(name)
+        { }
+
+        public override void Guess(int rightAnswer)
         {
             niceTry = counter;
+            GuessResult(niceTry, rightAnswer);
             counter++;
-            return niceTry;
         }
+
     }
 
-    class UberCheater : UberPlayer
+    public class UberCheater : UberPlayer
     {
-       
+        public UberCheater(string name)
+     : base(name)
+        { }
 
-        public override int Guess()
+        public override void Guess(int rightAnswer)
         {
 
-            return niceTry;
+
+            GuessCheck(niceTry, bossShot, rightAnswer);
+
         }
+
+        private void GuessCheck(int attempt, List<int> list, int rightAnswer)
+        {
+            foreach (int value in list)
+            {
+                if (attempt == value)
+                {
+                    attempt++;
+                    GuessCheck(attempt, list, rightAnswer);
+                }
+                else
+                {
+                    GuessResult(niceTry, rightAnswer);
+                }
+            }
+        }
+
     }
 
-    class SimplePlayer : Player
+    public class SimplePlayer : Player
     {
-       
-        public override int Guess()
+        public SimplePlayer(string name)
+     : base(name)
+        { }
+
+        public override void Guess(int rightAnswer)
         {
             Random randGuess = new Random();
             niceTry = randGuess.Next(40, 140);
-            return niceTry;
+            GuessResult(niceTry, rightAnswer);
+
         }
     }
 
-    class NotePlayer : SimplePlayer
+
+
+    public class NotePlayer : SimplePlayer
     {
-       
-        public override int Guess()
+        public NotePlayer(string name)
+     : base(name)
+        { }
+        public List<int> failNote = new List<int>();
+
+        public override void Guess(int rightAnswer)
+        {
+
+            Random randGuess = new Random();
+            niceTry = randGuess.Next(40, 140);
+            GuessNoteCheck(niceTry, failNote, rightAnswer);
+
+        }
+
+        private void GuessNoteCheck(int attempt, List<int> list, int rightAnswer)
+        {
+
+            foreach (int value in list)
+            {
+
+                if (attempt == value)
+                {
+                    attempt = new Random().Next(40, 140);
+                    GuessNoteCheck(attempt, list, rightAnswer);
+                }
+                else
+                {
+                    GuessResult(niceTry, rightAnswer);
+                }
+            }
+        }
+
+        public override void GuessResult(int niceTry, int rightAnswer)
+        {
+
+            if (niceTry == rightAnswer)
+            {
+                Console.WriteLine($"Congratulations to {Name}! He has made the right answer. ");
+                return;
+            }
+            else
+            {
+                bossShot.Add(niceTry);
+                failNote.Add(niceTry);
+            }
+        }
+
+    }
+
+
+
+    public class Cheater : SimplePlayer
+    {
+        public Cheater(string name)
+    : base(name)
+        { }
+
+        public override void Guess(int rightAnswer)
         {
             Random randGuess = new Random();
             niceTry = randGuess.Next(40, 140);
-            return niceTry;
-        }
-    }
 
-    class Cheater : SimplePlayer
-    {
-        public override int Guess()
+            GuessCheck(niceTry, bossShot, rightAnswer);
+            return;
+        }
+
+       private void GuessCheck(int attempt, List<int> list, int rightAnswer)
         {
-            Random randGuess = new Random();
-            niceTry = randGuess.Next(40, 140);
-            return niceTry;
+            foreach (int value in list)
+            {
+                if (attempt == value)
+                {
+                    attempt = new Random().Next(40, 140);
+                    GuessCheck(attempt, list, rightAnswer);
+                }else
+                {
+                    GuessResult(niceTry, rightAnswer);
+                }
+            }
         }
-
-
     }
+
+
 }
